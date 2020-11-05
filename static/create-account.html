@@ -23,10 +23,111 @@ From: https://codepen.io/colorlib/pen/aaaoVJ
 	window.onload = function() {
 
 		let psw = document.getElementById("password");
+		var lower = document.getElementById("lower");
+		var upper = document.getElementById("upper");
+		var number = document.getElementById("number");
+		var symbol = document.getElementById("number");
+		var passphrase = document.getElementById("passphrase");
+		var length = document.getElementById("length");
+
+		psw.onfocus = function() {
+			 document.getElementById("Password Checker").style.display = "block";
+		}
+
+		psw.onblur = function() {
+			 document.getElementById("Password Checker").style.display = "none";
+		}
 
 		psw.onkeyup = function () {
 
 			console.log(psw.value);
+			let password = psw.value;
+
+			// Find characters
+
+			let password_len = psw.value.length;
+
+			// Lowercase
+			let lowercase = /[a-z]/g;
+			let lowercase_num = ((password || '').match(lowercase) || []).length;
+
+			// Uppercase
+			let uppercase = /[A-Z]/g;
+			let uppercase_num = ((password || '').match(uppercase) || []).length;
+
+			// Numbers
+			let numbers = /[0-9]/g;
+			let number_num = ((password || '').match(numbers) || []).length;
+
+			// Symbols
+			let symbols = /[~`!@#$%^&*\(\)_\-+=\{\[\}\]|\\:;"'<,>\.?\/]/g;
+			let symbol_num = ((password || '').match(symbols) || []).length;
+
+			console.log(lowercase_num);
+			console.log(uppercase_num);
+			console.log(number_num);
+			console.log(symbol_num);
+			console.log(password_len);
+
+			// Tests
+			let criteria = 0;
+
+			if (lowercase_num >= 2) {
+				criteria++;
+				lower.classList.remove("invalid");
+				lower.classList.add("valid");
+			  } else {
+				lower.classList.remove("valid");
+				lower.classList.add("invalid");
+			}
+			if (uppercase_num >= 2) {
+				criteria++;
+				upper.classList.remove("invalid");
+				upper.classList.add("valid");
+			  } else {
+				upper.classList.remove("valid");
+				upper.classList.add("invalid");
+			}
+			if (number_num >= 2) {
+				criteria++;
+				number.classList.remove("invalid");
+				number.classList.add("valid");
+			  } else {
+				number.classList.remove("valid");
+				number.classList.add("invalid");
+			}
+			if (symbol_num >= 2) {
+				criteria++;
+				symbol.classList.remove("invalid");
+				symbol.classList.add("valid");
+			  } else {
+				symbol.classList.remove("valid");
+				symbol.classList.add("invalid");
+			}
+			if (password_len >= 20) {
+				criteria++;
+				passphrase.classList.remove("invalid");
+				passphrase.classList.add("valid");
+			  } else {
+				passphrase.classList.remove("valid");
+				passphrase.classList.add("invalid");
+			}
+
+			if (password_len >= 14) {
+				length.classList.remove("invalid");
+				length.classList.add("valid");
+			  } else {
+				length.classList.remove("valid");
+				length.classList.add("invalid");
+			}
+
+			console.log(criteria);
+
+			if (criteria >= 4 && password_len >= 14) {
+				document.getElementById("submit").style.disabled = false;
+			} else {
+				document.getElementById("submit").style.disabled = true;
+			}
 
 		}
 	}
@@ -39,13 +140,23 @@ From: https://codepen.io/colorlib/pen/aaaoVJ
 		<div class="main-agileinfo">
 			<div class="agileits-top">
 				<form action="/create-account" method="post">
-					<input class="text" type="text" name="username" placeholder="Username" required="">
+					<input class="text" type="text" name="username" placeholder="Username" required="true">
 					<br>
-					<input class="text" type="password" name="password" id="password" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" name="confirm-password" placeholder="Confirm Password" required="">
-					<input type="submit" value="SIGNUP">
+					<input class="text" type="password" name="password" id="password" placeholder="Password" required="true">
+					<div id="Password Checker" style="display: none;">
+					<p id="length" class="invalid">Password must be at least 14 characters long</p>
+					<h2>Password must contain at least 4 of the following:</h2>
+						<p id="lower" class="invalid">2 Lowercase</p>
+						<p id="upper" class="invalid">2 Uppercase</p>
+						<p id="number" class="invalid">2 Numbers</p>
+						<p id="symbol" class="invalid">2 Symbols</p>
+						<p id="passphrase" class="invalid">20 characters</p>
+
+					</div>
+					<input class="text w3lpass" type="password" name="confirm-password" placeholder="Confirm Password" required="true">
+					<input id="submit" type="submit" value="SIGNUP" disabled="true">
 				</form>
-				<p>Don't have an Account? <a href="#"> Login Now!</a></p>
+				<p>Already have an account? <a href="/login"> Login Now!</a></p>
 			</div>
 		</div>
 		<!-- copyright -->

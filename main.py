@@ -62,13 +62,16 @@ def login():
             if checked:
                 return "You are successfully logged in!"
             else:
-                return "Failed, passwords do not match"
+                break
 
-    return "Failed, your username was not found in the database"
+    return "Failed, your username or password was not found in our database"
 
 
-@app.route("/create-account", methods=["POST"])
+@app.route("/create-account", methods=["GET", "POST"])
 def create_account():
+    if request.method == "GET":
+        return app.send_static_file("create-account.html")
+
     values = request.values
     username, password = values["username"], values["password"]
     salt = bcrypt.gensalt()
