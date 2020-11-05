@@ -1,16 +1,101 @@
-bl# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from flask import Flask, request
+from random import randint
+import bcrypt
+import json
 
 
-# Press the green button in the gutter to run the script.
+
+app = Flask(__name__)
+PEPP = 4 # Number of possible peppers
+USERS = []
+
+def hash(passwd, salt):
+
+    # Generate pepper
+    # Peppers increase hash security by multiples of the pepper
+    # Pepper is a small random number appended to password
+    # To brute force a password w/ pepper attacker must guess what the pepper is
+    # To dehash a password w/ pepper we just need to try each possible pepper until the password's match
+    pepper = str(randint(1, PEPP))
+    passwd = passwd + pepper
+
+    hashed = bcrypt.hashpw(passwd.encode('utf_8'), salt)
+
+    return hashed
+
+def check_password(passwd, hash_passwd, pepper=PEPP):
+
+    # Loop over each possible pepper
+    for p in range(1, pepper):
+        # Check the password for the current pepper
+        pepp_passwd = passwd + str(p)
+        found = bcrypt.checkpw(pepp_passwd.encode("utf-8"), hash_passwd.encode("utf-8"))
+        # If the passwords match
+        if found:
+            return True
+
+
+    # If the loop finishes without finding the password, return false
+    return False
+
+
+
+@app.route("/", methods=["GET"])
+def main_page():
+    return app.send_static_file("create-account.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return app.send_static_file("login.html")
+
+    values = request.values
+    username, password = values["username"], values["password"]
+
+    with open("userdb.json", "r") as file:
+        db = json.load(file)
+
+    for db_user in db["users"]:
+        if username.lower() == db_user["username"].lower():
+            checked = check_password(password, db_user["password"])
+            if checked:
+                return "You are successfully logged in!"
+            else:
+                return "Failed, passwords do not match"
+
+    return "Failed, your username was not found in the database"
+
+
+@app.route("/create-account", methods=["POST"])
+def create_account():
+    values = request.values
+    username, password = values["username"], values["password"]
+    salt = bcrypt.gensalt()
+    with open("userdb.json", "r") as file:
+        db = json.load(file)
+
+    user = {
+        "username": username,
+        "password": hash(password, salt).decode("utf-8"),
+        "saltnpepper": [salt.decode("utf-8"), PEPP]
+    }
+
+    for db_user in db["users"]:
+        if user["username"].lower() == db_user["username"].lower():
+            return "User already in database, please either change your username or update your password here"
+
+    db["users"].append(user)
+
+    with open("userdb.json", "w") as file:
+        json.dump(db, file)
+
+    return "Success!"
+
+
+
+
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app.run()
