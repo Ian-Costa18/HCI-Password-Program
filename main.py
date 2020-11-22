@@ -93,7 +93,7 @@ def create_account():
     with open("userdb.json", "w") as file:
         json.dump(db, file)
 
-    return "Success!"
+    return 'Success! <a href="/login">Log In Here!</a>'
 
 
 
