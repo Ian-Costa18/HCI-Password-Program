@@ -1,5 +1,23 @@
+function checkSimilar(oldpsw, newpsw) {
+  let number_changed = oldpsw.length - newpsw.length;
+
+  let number_new = 0;
+  let new_list = [];
+
+  for (let i = 0; i < newpsw.length; i++) {
+    let oldpswSubstring = oldpsw.substr(i + number_changed, i);
+    if (!oldpswSubstring.includes(newpsw.charAt(i))) {
+      number_new++;
+      console.log(number_new);
+    }
+  }
+
+  return number_new;
+}
+
 window.onload = function () {
-  let psw = document.getElementById("password");
+  let oldPsw = document.getElementById("old-password");
+  let psw = document.getElementById("new-password");
   let username = document.getElementById("username");
   var lower = document.getElementById("lower");
   var upper = document.getElementById("upper");
@@ -9,6 +27,7 @@ window.onload = function () {
   var length = document.getElementById("length");
   let cpsw = document.getElementById("confirm-password");
   let matching = document.getElementById("matching");
+  let similar = document.getElementById("similar");
   let userinpass = document.getElementById("userinpass");
 
   let valid = false;
@@ -121,7 +140,6 @@ window.onload = function () {
       userinpass.classList.remove("valid");
       userinpass.classList.add("invalid");
     }
-
     if (criteria >= 4 && password_len >= 14 && check_userinpass) {
       valid = true;
     } else {
@@ -143,7 +161,15 @@ window.onload = function () {
       matching.classList.remove("valid");
       matching.classList.add("invalid");
     }
-    if (valid && passwordMatching) {
+    let checked = checkSimilar(oldPsw.value, psw.value);
+    if (checked >= 4) {
+      similar.classList.remove("invalid");
+      similar.classList.add("valid");
+    } else {
+      similar.classList.remove("valid");
+      similar.classList.add("invalid");
+    }
+    if (valid && passwordMatching && checked >= 4) {
       document.getElementById("submit").disabled = false;
     } else {
       document.getElementById("submit").disabled = true;
@@ -163,7 +189,15 @@ window.onload = function () {
       matching.classList.remove("valid");
       matching.classList.add("invalid");
     }
-    if (passwordMatching && valid) {
+    let checked = checkSimilar(oldPsw.value, psw.value);
+    if (checked >= 4) {
+      similar.classList.remove("invalid");
+      similar.classList.add("valid");
+    } else {
+      similar.classList.remove("valid");
+      similar.classList.add("invalid");
+    }
+    if (valid && passwordMatching && checked >= 4) {
       document.getElementById("submit").disabled = false;
     } else {
       document.getElementById("submit").disabled = true;
