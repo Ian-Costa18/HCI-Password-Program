@@ -1,1 +1,4 @@
-{"users": [{"username": "Test", "password": "test", "saltnpepper": ["test1", 4]}, {"username": "test", "password": "$2b$12$lVPrn52SaXrQ0aqLL2pSOOzb8ecG0S0kI3chZaKRMzTbmhXFHflOm", "saltnpepper": ["$2b$12$lVPrn52SaXrQ0aqLL2pSOO", 4]}, {"username": "ian", "password": "$2b$12$4K/gs/VlBgS8JBVFj9xQmOpYySyjNs83WNGnxKGiibJh/e3xsd4Ym", "saltnpepper": ["$2b$12$4K/gs/VlBgS8JBVFj9xQmO", 4]}, {"username": "aly", "password": "$2b$12$QWK91.48d4UwAMxnuyKz3.33JKwtzmbgTfq0yAXGPrzc3sAGvX43a", "saltnpepper": ["$2b$12$QWK91.48d4UwAMxnuyKz3.", 4]}]}
+{
+  "users": [
+  ]
+}
