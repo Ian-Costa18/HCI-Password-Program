@@ -1,8 +1,6 @@
 # Ian's Password Program
 ## For CYB3038: HCI/Usable Security
 
-### This project will be temporarily hosted at http://45.77.97.103 if you would like to try it yourself!
-
 ## Installation Guide:
 * Install Python 3
 * Run the command
