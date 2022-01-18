@@ -1,5 +1,7 @@
 # Ian's Password Program
-## For CYB3038: HCI/Usable Security
+## For my HCI/Usable Security class
+
+For anyone currently taking this class at my university, please do not copy this project and claim it as your own. Trust me, I know the professors and they will find this.
 
 ## Installation Guide:
 * Install Python 3
